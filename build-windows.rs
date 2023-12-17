@@ -36,7 +36,9 @@ fn build_runner_at_target(runner_crate_path: &Path) -> Result<(), Box<dyn Error>
         command.arg("--release");
     }
 
-    command.spawn()?.wait()?
+    command.spawn()?.wait()?;
+
+    Ok(())
 }
 
 fn copy_runner_crate_to(target_crate_path: &Path) -> Result<(), Box<dyn Error>> {
