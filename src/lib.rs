@@ -1,5 +1,3 @@
-#![cfg_attr(windows, feature(once_cell_try))]
-
 /*!
 A crate for running processes on a virtual desktop / virtual X server environment.
 
@@ -41,7 +39,7 @@ mod windows;
 #[cfg(all(windows, feature = "expose-impl"))]
 pub mod windows;
 #[cfg(windows)]
-use windows as platform;
+use windows::windows as platform;
 
 #[cfg(all(unix, not(feature = "expose-impl")))]
 mod unix;
@@ -64,10 +62,8 @@ impl TransparentRunner {
     /// Spawns the given [`Command`] transparently:
     ///  - on windows it is spawned on a new virtual desktop
     ///  - on unix it is spawned in a virtual X server environment
-    pub fn spawn_transparent(&self, command: &Command) -> io::Result<TransparentChild> {
-        self.0
-            .spawn_transparent(command)
-            .map(|child| TransparentChild(child, self.clone()))
+    pub fn spawn_transparent(&self, command: &Command) {
+        self.0.spawn_transparent(command);
     }
 }
 
@@ -126,11 +122,11 @@ pub trait CommandExt {
     /// Spawns the given [`Command`] transparently:
     ///  - on windows it is spawned on a new virtual desktop
     ///  - on unix it is spawned in a virtual X server environment
-    fn spawn_transparent(&self, runner: &TransparentRunner) -> io::Result<TransparentChild>;
+    fn spawn_transparent(&self, runner: &TransparentRunner);
 }
 
 impl CommandExt for Command {
-    fn spawn_transparent(&self, runner: &TransparentRunner) -> io::Result<TransparentChild> {
+    fn spawn_transparent(&self, runner: &TransparentRunner) {
         runner.spawn_transparent(self)
     }
 }
