@@ -46,7 +46,7 @@ mod unix;
 #[cfg(all(unix, feature = "expose-impl"))]
 pub mod unix;
 #[cfg(unix)]
-use unix as platform;
+use unix::unix as platform;
 
 /// Platform-dependent state required to run processes transparently.
 #[derive(Clone, Debug, Default)]
