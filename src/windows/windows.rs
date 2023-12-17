@@ -1,6 +1,7 @@
 #[cfg(target_os = "windows")]
 use crate::windows::virtual_desktop_runner::VirtualDesktop;
 use std::{ffi::OsStr, path::PathBuf};
+use crate::TransparentChild;
 /// Windows-specific state required to run processes transparently
 #[derive(Clone, Debug, Default)]
 pub struct TransparentRunnerImpl {}
@@ -9,7 +10,7 @@ impl TransparentRunnerImpl {
         TransparentRunnerImpl {}
     }
 
-    pub fn spawn_transparent(&self, command: &std::process::Command) -> i32 {
+    pub fn spawn_transparent(&self, command: &std::process::Command) -> u32 {
         let target_path = PathBuf::from(command.get_program());
         let target_args = command
             .get_args()
@@ -19,8 +20,7 @@ impl TransparentRunnerImpl {
             .collect::<Vec<String>>();
         let virtual_desktop = VirtualDesktop::new();
         let process = virtual_desktop.spawn_process(&target_path, &target_args);
-        let exit_code = process.wait();
-        virtual_desktop.close();
-        exit_code
+        let pid = process.process_info().dwProcessId;
+        return pid;
     }
 }
