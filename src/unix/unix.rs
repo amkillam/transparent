@@ -8,7 +8,7 @@ use std::{
 pub struct TransparentRunnerImpl;
 
 impl TransparentRunnerImpl {
-    pub fn spawn_transparent(&self, command: &Command) -> io::Result<Child> {
+    pub fn spawn_transparent(&self, command: &Command) -> u32 {
         let mut runner_command = Command::new("xvfb-run");
         runner_command
             .arg("--auto-servernum")
@@ -31,6 +31,9 @@ impl TransparentRunnerImpl {
             runner_command.current_dir(std::env::current_dir()?);
         }
 
-        runner_command.spawn()
+        runner_command.spawn().unwrap_or_else(|
+            e| panic!("Failed to spawn xvfb-run: {}", e)
+        ).id() as u32
+
     }
 }
