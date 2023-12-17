@@ -34,8 +34,9 @@ pub struct VirtualDesktopProcess {
 }
 
 impl VirtualDesktopProcess {
-    pub fn from_virtual_desktop_runner(
-        virtual_desktop_runner: &VirtualDesktop,
+
+    pub fn from_virtual_desktop(
+        virtual_desktop: &VirtualDesktop,
         target_path: &PathBuf,
         target_args: &Vec<String>,
     ) -> Self {
@@ -53,7 +54,7 @@ impl VirtualDesktopProcess {
                 CREATE_UNICODE_ENVIRONMENT,
                 None,
                 None,
-                &virtual_desktop_runner.startup_info,
+                &virtual_desktop.startup_info,
                 process_info.as_mut_ptr(),
             )
         }
@@ -127,6 +128,21 @@ impl VirtualDesktopProcess {
 
         self.fetch_exit_code()
     }
+
+    pub fn process_info(&self) -> &PROCESS_INFORMATION {
+        &self.process_info
+    }
+
+    pub fn cancel_event(&self) -> &HANDLE {
+        &self.cancel_event
+    }
+    
+    pub fn kill(&self) {
+        unsafe { TerminateProcess(self.process_info.hProcess, 0) }
+            .ok()
+            .expect("Failed to terminate target application.");
+    }
+
 }
 
 #[derive(Clone, Debug, Copy)]
@@ -189,6 +205,6 @@ impl VirtualDesktop {
         target_path: &PathBuf,
         target_args: &Vec<String>,
     ) -> VirtualDesktopProcess {
-        VirtualDesktopProcess::from_virtual_desktop_runner(self, target_path, target_args)
+        VirtualDesktopProcess::from_virtual_desktop(self, target_path, target_args)
     }
 }
