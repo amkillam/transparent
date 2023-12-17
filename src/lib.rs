@@ -64,7 +64,7 @@ impl TransparentRunner {
     ///  - on unix it is spawned in a virtual X server environment
     pub fn spawn_transparent(&self, command: &Command) -> u32 
 {        self.0
-            .spawn_transparent(command);
+            .spawn_transparent(command)
 }}
 
 /// Representation of a running or exited child process that was spawned using [`TransparentRunner::spawn_transparent`].
