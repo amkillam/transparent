@@ -62,10 +62,10 @@ impl TransparentRunner {
     /// Spawns the given [`Command`] transparently:
     ///  - on windows it is spawned on a new virtual desktop
     ///  - on unix it is spawned in a virtual X server environment
-    pub fn spawn_transparent(&self, command: &Command) -> u32 
-{        self.0
-            .spawn_transparent(command)
-}}
+    pub fn spawn_transparent(&self, command: &Command) -> u32 {
+        self.0.spawn_transparent(command)
+    }
+}
 
 /// Representation of a running or exited child process that was spawned using [`TransparentRunner::spawn_transparent`].
 #[derive(Debug)]

@@ -34,7 +34,6 @@ pub struct VirtualDesktopProcess {
 }
 
 impl VirtualDesktopProcess {
-
     pub fn from_virtual_desktop(
         virtual_desktop: &VirtualDesktop,
         target_path: &PathBuf,
@@ -136,13 +135,12 @@ impl VirtualDesktopProcess {
     pub fn cancel_event(&self) -> &HANDLE {
         &self.cancel_event
     }
-    
+
     pub fn kill(&self) {
         unsafe { TerminateProcess(self.process_info.hProcess, 0) }
             .ok()
             .expect("Failed to terminate target application.");
     }
-
 }
 
 #[derive(Clone, Debug, Copy)]

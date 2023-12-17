@@ -1,8 +1,4 @@
-use std::{
-    io,
-    process::{Child, Command, Stdio},
-};
-
+use std::process::{Command, Stdio};
 /// Unix-specific state required to run processes transparently.
 #[derive(Clone, Debug, Default)]
 pub struct TransparentRunnerImpl;
@@ -28,12 +24,15 @@ impl TransparentRunnerImpl {
         if let Some(cd) = command.get_current_dir() {
             runner_command.current_dir(cd);
         } else {
-            runner_command.current_dir(std::env::current_dir()?);
+            runner_command.current_dir(
+                std::env::current_dir()
+                    .unwrap_or_else(|err| panic!("Failed to get current directory: {}", err)),
+            );
         }
 
-        runner_command.spawn().unwrap_or_else(|
-            e| panic!("Failed to spawn xvfb-run: {}", e)
-        ).id() as u32
-
+        runner_command
+            .spawn()
+            .unwrap_or_else(|e| panic!("Failed to spawn xvfb-run: {}", e))
+            .id() as u32
     }
 }

@@ -1,7 +1,7 @@
 #[cfg(target_os = "windows")]
 use crate::windows::virtual_desktop_runner::VirtualDesktop;
-use std::{ffi::OsStr, path::PathBuf};
 use crate::TransparentChild;
+use std::{ffi::OsStr, path::PathBuf};
 /// Windows-specific state required to run processes transparently
 #[derive(Clone, Debug, Default)]
 pub struct TransparentRunnerImpl {}
